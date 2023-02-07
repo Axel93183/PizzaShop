@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1>Page d'accueil</h1>
+
+{% for pizza in Pizzas %}
+
+<h2>{{pizza.name}}</h2>
+<h3>{{pizza.description}}</h3>
+<h2>{{pizza.price}} €</h2>
+<img src="{{pizza.imageUrl}}" alt="">
+
+
+
+
+{% endfor %}
+
+{% endblock %}
