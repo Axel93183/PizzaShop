@@ -2,12 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserRepository;
-use Gedmo\Mapping\Annotation\Timestampable;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -38,15 +37,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $lastname = null;
 
-    #[Timestampable(on: 'create')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[Timestampable(on: 'update')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Address $address = null;
 
     public function getId(): ?int
@@ -186,16 +183,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function setAddress(?Address $address): self
     {
-        // unset the owning side of the relation if necessary
-        if ($address === null && $this->address !== null) {
-            $this->address->setUser(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($address !== null && $address->getUser() !== $this) {
-            $address->setUser($this);
-        }
-
         $this->address = $address;
 
         return $this;
