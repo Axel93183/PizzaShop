@@ -36,7 +36,7 @@ class UserController extends AbstractController
             $repository->save($user, true);
 
             //redirection vers la page d'accueil
-            return $this->redirectToRoute('app_user_registration');
+            return $this->redirectToRoute('app_pizza_home');
         }
 
         return $this->render('user/registration.html.twig', [

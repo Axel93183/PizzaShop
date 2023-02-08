@@ -2,18 +2,44 @@
 
 {% block body %}
 
-<h1>Page d'accueil</h1>
-
-{% for pizza in Pizzas %}
-
-<h2>{{pizza.name}}</h2>
-<h3>{{pizza.description}}</h3>
-<h2>{{pizza.price}} €</h2>
-<img src="{{pizza.imageUrl}}" alt="">
-
-
+    <div class="hero-unit">
+        <div class="hero-bg-image">
+            <img src="images/banner.jpg"/>
+            <div class="hero-bg-image-frame"></div>
+        </div>
+        <h1> Pizza Shop </h1>
+        <p class= "hero-subtitle"> Vos meilleur pizzas à portée de click </p>
+    </div>
 
 
-{% endfor %}
+    <div class="container"> 
+        <h1> Nos pizzas </h1>
+        {% for pizza in pizzas %}
+        <div class="pizza-card">
 
+            <div class="pizza-card-bg-image">
+                {% if pizza.imageUrl %}
+                <img src="{{ pizza.imageUrl }}" alt="{{ pizza.name }}"/>
+                <div class="pizza-card-bg-image-frame"></div>
+                {% endif %}
+            </div>
+
+            <h3> {{ pizza.name }} </h3>
+
+            <p class="description"> {{ pizza.description }} </p>
+
+            <div class="pizza-card-footer">
+                <div class="price">
+                    <p>Prix: {{ pizza.price }} €</p>
+                </div>
+                <a class="btn" href="">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>Ajouter au panier </span>
+                </a>
+            </div>
+        </div>
+
+
+        {% endfor %}
+    </div>  
 {% endblock %}
