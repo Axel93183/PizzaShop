@@ -43,7 +43,15 @@ class UserController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
+    // #[Route('/mon-profil', name: 'app_user_myprofil')]
+    // public function myprofil(UserRepository $repository): Response
+    // {
+    //     $user = $security->getUser();
+    
+    //     return $this->render('author/index.html.twig', [
+    //         'user' => $user,
+    //     ]);
+    // }
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -63,5 +71,29 @@ class UserController extends AbstractController
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    #[Route(path: '/mon-profil', name: 'app_user_myProfile')]
+    public function myProfile(UserRepository $repository, Request $request): Response
+    {
+        //récuperation de l'utilisateur connecté
+        $user= $this->getUser();
+
+        //creer le formulaire
+        $form= $this->createForm(ProfileType::class, $user);
+
+        //remplissage du formulaire 
+        $form->handleRequest($request);
+
+        //test si form is valid and submitted
+        if($form->isSubmitted() && $form->isValid()){
+            //on enregistre les modifications dans la bd via le repo
+            $repository->add($user, true);
+        }
+
+        //affichage de la page HTML
+        return $this->render('security/myProfile.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 }

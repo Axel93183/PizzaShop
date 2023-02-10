@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="container mg-top">
+
+        <h1> Mon Panier </h1>
+        {% if app.user.basket.articles|length == 0 %}
+            <p> Votre panier est vide!</p>
+        {% else %}
+            {% for article in app.user.basket.articles %}
+                <div class="pizza-card">
+                    <div class="pizza-card-bg-image">
+                        {% if article.pizza.imageUrl %}
+                            <img src="{{ article.pizza.imageUrl }}" alt="{{ article.pizza.name }}"/>
+                            <div class="pizza-card-bg-image-frame"></div>
+                        {% endif %}
+                    </div>
+
+                    <h3> {{ article.pizza.name }} </h3>
+                    <p class="description"> {{ article.pizza.description }} </p>
+                   
+                    <div class="quantity-container">
+                       
+                        <a class="btn minus" href="{{ path('app_basket_moins' , {id: article.id})}}">
+                            <i class="fa-regular fa-square-minus"></i>
+                        </a>
+
+                        <p class="quantity"> {{ article.quantity }} </p>
+                        
+                        <a class="btn plus" href="{{ path('app_basket_plus' , {id: article.id})}}">
+                            <i class="fa-regular fa-square-plus"></i>
+                        </a>
+
+                    </div>
+
+                    <div class="pizza-card-footer">
+
+                        <div class="price">
+                            <p>Prix: {{ article.total }} €</p>
+                        </div>
+
+                        <a class="btn" href="{{ path('app_basket_remove', {id: article.id})}}">
+                            <i class="fa-solid fa-trash"></i>
+                            <span>Supprimer </span>
+                        </a>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+            <h2> Total: {{app.user.basket.total}} € </h2>
+            
+            <p>
+                <a href="{{ path('app_order_display') }}" class="btn" >Commander</a>
+            </p>
+            
+        {% endif %}   
+    </div>
+{% endblock %}

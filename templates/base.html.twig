@@ -39,7 +39,13 @@
                     <a class="header-item" href="{{ path('app_logout') }}"> 
                         <i class="fa-solid fa-right-from-bracket"></i>
                     </a>
+                    <a class="header-item"  href="{{ path('app_basket_display') }}">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </a>
 
+                    <a class="header-item"  href="#user">
+                        <i class="fa-solid fa-user"></i>
+                     </a>
             {% else %} 
 
                     <a class="header-item" href="{{ path('app_login') }}"> 
@@ -47,13 +53,9 @@
                     </a>
 
             {% endif %}
-            <a class="header-item"  href="#panier">
-                <i class="fa-solid fa-basket-shopping"></i>
-            </a>
+           
 
-            <a class="header-item"  href="#user">
-                <i class="fa-solid fa-user"></i>
-            </a>
+          
 
             </div>
 

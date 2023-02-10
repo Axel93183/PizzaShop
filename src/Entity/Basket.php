@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\BasketRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\BasketRepository;
+use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation\Timestampable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: BasketRepository::class)]
 class Basket
@@ -19,13 +20,15 @@ class Basket
     #[ORM\OneToOne(inversedBy: 'basket', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    #[Timestampable(on: 'create')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[Timestampable(on: 'update')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'basket', targetEntity: Article::class)]
+    #[ORM\OneToMany(mappedBy: 'basket', targetEntity: Article::class, cascade: ['persist', 'remove'])]
     private Collection $articles;
 
     public function __construct()
@@ -102,5 +105,15 @@ class Basket
         }
 
         return $this;
+    }
+
+    public function getTotal() : float
+    {
+        $total= 0.0;
+        foreach($this->articles as $article){
+            $total += $article->getTotal(); // pour chaque article je récupére la totale selon le prix et la quantité
+        }
+
+        return $total;
     }
 }

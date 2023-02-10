@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+ <div class="container mg-top">
+        <h1> Passer la commande </h1>
+
+        <ul>
+            {% for article in app.user.basket.articles %}
+                <li>{{ article.quantity }}x {{ article.pizza.name }} ({{ article.total }} €)</li>
+            {% endfor %}
+        </ul>
+
+        <p> Total de la commande: {{ app.user.basket.total }}  </p>
+
+        {{ form_start(form) }}
+
+        <h2> Vos coordonées </h2>
+
+        {{ form_widget(form.address) }}
+
+        <h2> Votre carte bleue </h2>
+
+        <p> Total: {{ app.user.basket.total }}  </p>
+
+        <div>
+            {{ form_row(form.cardNumber)}}
+        </div>
+
+        <div>
+            {{ form_row(form.cardName)}}
+        </div>
+
+        <div>
+            {{ form_row(form.expirationDate)}}
+        </div>
+
+        <div>
+            {{ form_row(form.cvc)}}
+        </div>
+
+        {{ form_end(form) }}
+
+
+    </div>
+{% endblock %}

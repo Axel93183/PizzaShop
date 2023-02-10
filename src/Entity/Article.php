@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\ArticleRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ArticleRepository;
+use Gedmo\Mapping\Annotation\Timestampable;
+use phpDocumentor\Reflection\Types\This;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -14,20 +16,25 @@ class Article
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\ManyToOne(inversedBy: 'articles', cascade: ['persist', 'remove'])]
     private ?Basket $basket = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $quantity = null;
 
-    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\ManyToOne(inversedBy: 'articles', cascade: ['persist', 'remove'])]
     private ?Pizza $pizza = null;
 
+    #[Timestampable(on: 'create')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[Timestampable(on: 'update')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAT = null;
+
+    #[ORM\ManyToOne(inversedBy: 'Article')]
+    private ?Order $orders = null;
 
     public function getId(): ?int
     {
@@ -90,6 +97,24 @@ class Article
     public function setUpdatedAT(?\DateTimeInterface $updatedAT): self
     {
         $this->updatedAT = $updatedAT;
+
+        return $this;
+    }
+
+    //fonction qui retourne le total d'articleselon le prix et la quantité de pizza voulu
+    public function getTotal():float
+    {
+        return round($this->quantity * $this->pizza->getPrice(),2);
+    }
+
+    public function getOrders(): ?Order
+    {
+        return $this->orders;
+    }
+
+    public function setOrders(?Order $orders): self
+    {
+        $this->orders = $orders;
 
         return $this;
     }
